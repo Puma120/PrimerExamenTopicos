@@ -349,36 +349,8 @@
           }
         }
       ]
-    },
-    {
-      "name": "General",
-      "item": [
-        {
-          "name": "Root Endpoint",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/",
-              "host": ["{{base_url}}"],
-              "path": [""]
-            }
-          }
-        },
-        {
-          "name": "OpenAPI Documentation",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/docs",
-              "host": ["{{base_url}}"],
-              "path": ["docs"]
-            }
-          }
-        }
-      ]
     }
+    
   ],
   "variable": [
     {
