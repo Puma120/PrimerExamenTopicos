@@ -1,0 +1,309 @@
+openapi: 3.0.0
+info:
+  title: "Catálogo y Órdenes API"
+  description: "API REST para gestión de productos y órdenes de una tienda"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:5000"
+    description: "Servidor de desarrollo"
+
+paths:
+  /:
+    get:
+      summary: "Endpoint raíz"
+      tags:
+        - "General"
+      responses:
+        "200":
+          description: "Mensaje de bienvenida"
+
+  /productos:
+    get:
+      summary: "Listar productos"
+      tags:
+        - "Productos"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: categoria
+          in: query
+          schema:
+            type: string
+        - name: precio_min
+          in: query
+          schema:
+            type: number
+            minimum: 0
+        - name: precio_max
+          in: query
+          schema:
+            type: number
+            minimum: 0
+      responses:
+        "200":
+          description: "Lista de productos con paginación"
+        "400":
+          description: "Error de validación"
+        "404":
+          description: "Página no encontrada"
+
+    post:
+      summary: "Crear producto"
+      tags:
+        - "Productos"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+                - precio
+                - stock
+                - categoria
+              properties:
+                nombre:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                precio:
+                  type: number
+                  minimum: 0.01
+                stock:
+                  type: integer
+                  minimum: 0
+                categoria:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+      responses:
+        "201":
+          description: "Producto creado exitosamente"
+        "400":
+          description: "Error de validación"
+
+  /productos/{producto_id}:
+    get:
+      summary: "Obtener producto por ID"
+      tags:
+        - "Productos"
+      parameters:
+        - name: producto_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Detalles del producto"
+        "404":
+          description: "Producto no encontrado"
+
+    put:
+      summary: "Actualizar producto"
+      tags:
+        - "Productos"
+      parameters:
+        - name: producto_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+                - precio
+                - stock
+                - categoria
+              properties:
+                nombre:
+                  type: string
+                precio:
+                  type: number
+                stock:
+                  type: integer
+                categoria:
+                  type: string
+      responses:
+        "200":
+          description: "Producto actualizado"
+        "404":
+          description: "Producto no encontrado"
+        "400":
+          description: "Error de validación"
+
+    delete:
+      summary: "Eliminar producto (BONUS)"
+      tags:
+        - "Productos"
+      parameters:
+        - name: producto_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Producto eliminado"
+        "404":
+          description: "Producto no encontrado"
+
+  /ordenes:
+    get:
+      summary: "Listar órdenes"
+      tags:
+        - "Órdenes"
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: size
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: cliente
+          in: query
+          schema:
+            type: string
+        - name: fecha_desde
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: fecha_hasta
+          in: query
+          schema:
+            type: string
+            format: date-time
+      responses:
+        "200":
+          description: "Lista de órdenes con paginación"
+        "400":
+          description: "Error de validación"
+
+    post:
+      summary: "Crear orden"
+      tags:
+        - "Órdenes"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - cliente
+                - items
+              properties:
+                cliente:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                items:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    required:
+                      - producto_id
+                      - cantidad
+                    properties:
+                      producto_id:
+                        type: integer
+                        minimum: 1
+                      cantidad:
+                        type: integer
+                        minimum: 1
+      responses:
+        "201":
+          description: "Orden creada exitosamente"
+        "400":
+          description: "Error de validación"
+        "404":
+          description: "Producto no encontrado"
+        "409":
+          description: "Stock insuficiente"
+
+  /ordenes/{orden_id}:
+    get:
+      summary: "Obtener orden por ID"
+      tags:
+        - "Órdenes"
+      parameters:
+        - name: orden_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "Detalles de la orden"
+        "404":
+          description: "Orden no encontrada"
+
+components:
+  schemas:
+    Producto:
+      type: object
+      properties:
+        id:
+          type: integer
+        nombre:
+          type: string
+        precio:
+          type: number
+        stock:
+          type: integer
+        categoria:
+          type: string
+
+    Orden:
+      type: object
+      properties:
+        id:
+          type: integer
+        fecha:
+          type: string
+          format: date-time
+        cliente:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              producto_id:
+                type: integer
+              cantidad:
+                type: integer
+        total_calculado:
+          type: number
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string

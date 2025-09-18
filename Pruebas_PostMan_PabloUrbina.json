@@ -1,0 +1,390 @@
+{
+  "info": {
+    "name": "Catálogo y Órdenes API",
+    "description": "Colección de pruebas para la API REST de Catálogo y Órdenes",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "12345678"
+  },
+  "item": [
+    {
+      "name": "Productos",
+      "item": [
+        {
+          "name": "Listar Productos (con paginación)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos?page=1&size=5",
+              "host": ["{{base_url}}"],
+              "path": ["productos"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrar Productos por Categoría",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos?categoria=Electrónicos&page=1&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["productos"],
+              "query": [
+                {
+                  "key": "categoria",
+                  "value": "Electrónicos"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrar Productos por Rango de Precio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos?precio_min=100&precio_max=500&page=1&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["productos"],
+              "query": [
+                {
+                  "key": "precio_min",
+                  "value": "100"
+                },
+                {
+                  "key": "precio_max",
+                  "value": "500"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Producto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos/1",
+              "host": ["{{base_url}}"],
+              "path": ["productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Crear Nuevo Producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Producto de Prueba\",\n    \"precio\": 199.99,\n    \"stock\": 25,\n    \"categoria\": \"Pruebas\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/productos",
+              "host": ["{{base_url}}"],
+              "path": ["productos"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Producto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Producto Actualizado\",\n    \"precio\": 249.99,\n    \"stock\": 20,\n    \"categoria\": \"Pruebas Actualizadas\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/productos/1",
+              "host": ["{{base_url}}"],
+              "path": ["productos", "1"]
+            }
+          }
+        },
+        {
+          "name": "Error: Producto No Encontrado",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos/999",
+              "host": ["{{base_url}}"],
+              "path": ["productos", "999"]
+            }
+          }
+        },
+        {
+          "name": "Error: Crear Producto con Precio Inválido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Producto Inválido\",\n    \"precio\": -10.99,\n    \"stock\": 25,\n    \"categoria\": \"Pruebas\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/productos",
+              "host": ["{{base_url}}"],
+              "path": ["productos"]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Producto (BONUS)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos/26",
+              "host": ["{{base_url}}"],
+              "path": ["productos", "26"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Órdenes",
+      "item": [
+        {
+          "name": "Crear Orden Exitosa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cliente\": \"Juan Pérez\",\n    \"items\": [\n        {\n            \"producto_id\": 1,\n            \"cantidad\": 1\n        },\n        {\n            \"producto_id\": 3,\n            \"cantidad\": 2\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ordenes",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Error: Stock Insuficiente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cliente\": \"María García\",\n    \"items\": [\n        {\n            \"producto_id\": 1,\n            \"cantidad\": 999\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ordenes",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Error: Producto No Existe en Orden",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cliente\": \"Carlos López\",\n    \"items\": [\n        {\n            \"producto_id\": 999,\n            \"cantidad\": 1\n        }\n    ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ordenes",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes"]
+            }
+          }
+        },
+        {
+          "name": "Listar Órdenes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ordenes?page=1&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrar Órdenes por Cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ordenes?cliente=Juan&page=1&size=10",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes"],
+              "query": [
+                {
+                  "key": "cliente",
+                  "value": "Juan"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "size",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Filtrar Órdenes por Fecha",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ordenes?fecha_desde=2024-01-01T00:00:00&fecha_hasta=2024-12-31T23:59:59",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes"],
+              "query": [
+                {
+                  "key": "fecha_desde",
+                  "value": "2024-01-01T00:00:00"
+                },
+                {
+                  "key": "fecha_hasta",
+                  "value": "2024-12-31T23:59:59"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener Orden por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ordenes/1",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes", "1"]
+            }
+          }
+        },
+        {
+          "name": "Error: Orden No Encontrada",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/ordenes/999",
+              "host": ["{{base_url}}"],
+              "path": ["ordenes", "999"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "General",
+      "item": [
+        {
+          "name": "Root Endpoint",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/",
+              "host": ["{{base_url}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "OpenAPI Documentation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/docs",
+              "host": ["{{base_url}}"],
+              "path": ["docs"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}
